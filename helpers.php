@@ -19,10 +19,11 @@ function basePath(string $path = ""): string {
  *
  * @return void
  */
-function loadView(string $name): void {
+function loadView(string $name, array $data = []): void {
     $viewPath = basePath("views/{$name}.view.php");
     
     if (file_exists($viewPath)) {
+        extract($data);
         require $viewPath;
     } else {
         inspectAndDie("View {$name} does not exist...");
@@ -69,8 +70,18 @@ function inspectAndDie(mixed $value): void {
      * @return void
      */
     echo "<pre>";
-    die(print_r($value));
+    die(var_dump($value));
     echo "</pre>";
+}
+
+/**
+ * Formats the salay to a currency format
+ *
+ * @param $salary salary
+ *
+ */
+function formatSalary($salary) {
+    return '$' . number_format($salary, 0);
 }
 
 ?>

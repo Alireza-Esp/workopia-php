@@ -7,7 +7,8 @@ class Database{
         $dsn = "mysql:host={$config['host']};port={$config['port']};dbname={$config['dbname']}";
 
         $options = [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
         ];
 
         try {
@@ -17,4 +18,24 @@ class Database{
             
         }
     }
+    
+    /**
+     * Executes a database query
+     *
+     * @param string $query query
+     * 
+     * @return PDOStatement
+     * @throws PDOException
+     */
+    public function query(string $query) {
+        try {
+            $sth = $this->conn->prepare($query);
+            $sth->execute();
+            return $sth;
+        } catch (PDOException $e) {
+            throw new Exception("Query failed to execute: {$e->getMessage()}");
+        }
+    }
+
+    
 }
