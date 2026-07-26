@@ -1,7 +1,7 @@
 <?php
-
-
 namespace Framework;
+
+use App\Controllers\ErrorController;
 
 class Router {
     protected $routes = [];
@@ -81,11 +81,6 @@ class Router {
      *
      * @return void
      */
-    public function error(int $httpCode = 404): void {
-        http_response_code($httpCode);
-        loadView("errors/{$httpCode}");
-        exit();
-    }
 
     /**
      * Method route
@@ -108,7 +103,7 @@ class Router {
             }
         }
 
-        $this->error();
+        ErrorController::notFound();
 
     }
 }
