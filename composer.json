@@ -1,0 +1,16 @@
+{
+    "name": "alireza-esp/workopia-php",
+    "description": "Workopia implementation with pure php.",
+    "authors": [
+        {
+            "name": "Alireza Esmaeilpour",
+            "email": "alireza.esp07@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Framework\\": "Framework/",
+            "App\\": "App/"
+        }
+    }
+}

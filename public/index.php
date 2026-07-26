@@ -1,13 +1,16 @@
 <?php
+require __DIR__ . "/../vendor/autoload.php";
 require "../helpers.php";
 
-$autoloader = function (string $class) {
-    $path = basePath('Framework/' . $class . '.php');
-    if (file_exists($path)) {
-        require $path;
-    }
-};
-spl_autoload_register($autoloader);
+use Framework\Router;
+
+// $autoloader = function (string $class) {
+//     $path = basePath('Framework/' . $class . '.php');
+//     if (file_exists($path)) {
+//         require $path;
+//     }
+// };
+// spl_autoload_register($autoloader);
 
 // Initiate Router obj
 $router = new Router();
