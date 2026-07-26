@@ -11,15 +11,18 @@ class Router {
      *
      * @param $method method
      * @param $uri uri
-     * @param $controller controller
+     * @param $action action; equals to "Controller@method" that we want to be executed
      *
      * @return void
      */
-    protected function registerRoute($method, $uri, $controller): void {
+    protected function registerRoute($method, $uri, $action): void {
+        list($controller, $controllerMethod) = explode("@", $action);
+
         $this->routes[] = [
             'method' => $method,
             'uri' => $uri,
-            'controller' => $controller
+            'controller' => $controller,
+            'controllerMethod' => $controllerMethod,
         ];
     }
 
@@ -27,48 +30,48 @@ class Router {
      * Add a GET route
      *
      * @param string $uri uri
-     * @param string $controller controller
+     * @param string $action action; equals to "Controller@method" that we want to be executed
      *
      * @return void
      */
-    public function get(string $uri, string $controller): void {
-        $this->registerRoute('GET', $uri, $controller);
+    public function get(string $uri, string $action): void {
+        $this->registerRoute('GET', $uri, $action);
     }
 
     /**
      * Add a POST route
      *
      * @param string $uri uri
-     * @param string $controller controller
+     * @param string $action action; equals to "Controller@method" that we want to be executed
      *
      * @return void
      */
-    public function post(string $uri, string $controller): void {
-        $this->registerRoute('POST', $uri, $controller);
+    public function post(string $uri, string $action): void {
+        $this->registerRoute('POST', $uri, $action);
     }
 
     /**
      * Add a PUT route
      *
      * @param string $uri uri
-     * @param string $controller controller
+     * @param string $action action; equals to "Controller@method" that we want to be executed
      *
      * @return void
      */
-    public function put(string $uri, string $controller): void {
-        $this->registerRoute('PUT', $uri, $controller);
+    public function put(string $uri, string $action): void {
+        $this->registerRoute('PUT', $uri, $action);
     }
 
     /**
      * Add a DELETE route
      *
      * @param string $uri uri
-     * @param string $controller controller
+     * @param string $action action; equals to "Controller@method" that we want to be executed
      *
      * @return void
      */
-    public function delete(string $uri, string $controller): void {
-        $this->registerRoute('DELETE', $uri, $controller);
+    public function delete(string $uri, string $action): void {
+        $this->registerRoute('DELETE', $uri, $action);
     }
 
     /**
@@ -95,7 +98,12 @@ class Router {
     public function route(string $uri, string $method): void {
         foreach ($this->routes as $route) {
             if ($uri === $route['uri'] && $method === $route['method']) {
-                require basePath("App/" . $route['controller']);
+                // Extract controller and controller method
+                $controller = 'App\\Controllers\\' . $route['controller'];
+                $controllerMethod = $route['controllerMethod'];
+                // Initiate controller class
+                $controllerInstance = new $controller();
+                $controllerInstance->$controllerMethod();
                 return;
             }
         }
