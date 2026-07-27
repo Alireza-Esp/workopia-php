@@ -86,19 +86,50 @@ class Router {
      * Method route
      *
      * @param string $uri uri
-     * @param string $method uri
      *
      * @return void
      */
-    public function route(string $uri, string $method): void {
+    public function route(string $uri): void {
+        $requestMethod = $_SERVER['REQUEST_METHOD'];
+        $uriSegments = explode('/', trim($uri, '/'));
+
         foreach ($this->routes as $route) {
-            if ($uri === $route['uri'] && $method === $route['method']) {
+            if ($route['method'] !== $requestMethod) {
+                continue;
+            }
+
+            $routeSegments = explode('/', trim($route['uri'], '/'));
+
+            if (count($routeSegments) !== count($uriSegments)) {
+                continue;
+            }
+
+            $params = [];
+            $match = true;
+
+            foreach ($routeSegments as $i => $routeSegment) { 
+                $uriSegment = $uriSegments[$i];
+
+                $segmentsAreEqual = $routeSegment === $uriSegment;
+                
+                $hasParameter = preg_match('/\{(.+?)\}/', $routeSegment, $matches);
+
+                if (!$segmentsAreEqual && !$hasParameter) {
+                    $match = false;
+                    break;
+                }
+                if ($hasParameter) {
+                    $params[$matches[1]] = $uriSegment;
+                }
+            }
+
+            if ($match) {
                 // Extract controller and controller method
                 $controller = 'App\\Controllers\\' . $route['controller'];
                 $controllerMethod = $route['controllerMethod'];
                 // Initiate controller class
                 $controllerInstance = new $controller();
-                $controllerInstance->$controllerMethod();
+                $controllerInstance->$controllerMethod($params);
                 return;
             }
         }
