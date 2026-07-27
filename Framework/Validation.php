@@ -25,5 +25,4 @@ class Validation
 
         return $value1 === $value2;
     }
-    
 }

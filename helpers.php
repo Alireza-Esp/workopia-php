@@ -84,4 +84,13 @@ function formatSalary($salary) {
     return '$' . number_format($salary, 0);
 }
 
-?>
+/**
+ * Sanitize a dirty string from special characters
+ *
+ * @param string $dirty
+ *
+ * @return string
+ */
+function sanitize(string $dirty) : string {
+    return filter_var(trim($dirty), FILTER_SANITIZE_SPECIAL_CHARS);
+}
