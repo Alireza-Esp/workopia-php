@@ -2,6 +2,7 @@
 namespace App\Controllers;
 
 use Framework\Database;
+use Framework\Validation;
 
 class ListingController {
     protected $db;
@@ -55,7 +56,27 @@ class ListingController {
 
         $newListingData = array_map('sanitize', $newListingData);
     
-        inspectAndDie($newListingData);
+        $requiredFields = ['title', 'description', 'company', 'phone', 'email'];
+
+        $errors = [];
+
+        foreach ($requiredFields as $field) {
+            if (empty($newListingData[$field]) || !Validation::string($newListingData[$field])) {
+                $errors[$field] = ucfirst($field) . " is required";
+            }
+        }
+
+        if (!empty($errors)) {
+            loadView(
+                'listings/create',
+                [
+                    'errors' => $errors,
+                    'listing' => $newListingData
+                ]
+                );
+        } else {
+            echo "success!";
+        }
     }
     
 }
