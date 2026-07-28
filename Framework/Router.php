@@ -91,7 +91,13 @@ class Router {
      */
     public function route(string $uri): void {
         $requestMethod = $_SERVER['REQUEST_METHOD'];
+
+        if ($requestMethod == "POST" && isset($_POST["_method"])) {
+            $requestMethod = strtoupper($_POST["_method"]);
+        }
+
         $uriSegments = explode('/', trim($uri, '/'));
+
 
         foreach ($this->routes as $route) {
             if ($route['method'] !== $requestMethod) {

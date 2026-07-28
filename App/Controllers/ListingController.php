@@ -6,13 +6,14 @@ use Framework\Validation;
 
 class ListingController {
     protected $db;
+
     public function __construct() {
         $db_config = require basePath('config/db.php');
         $this->db = new Database(config: $db_config);
     }
 
     public function index() {
-        $listings = $this->db->query("SELECT * FROM listings LIMIT 6")->fetchAll();
+        $listings = $this->db->query("SELECT * FROM listings")->fetchAll();
 
         loadView(
             "listings/index",
@@ -102,5 +103,23 @@ class ListingController {
 
         }
     }
-    
+
+    public function destroy($params): void {
+        $id = $params['id'];
+
+        $queryParams = [
+            'id' => $id
+        ];
+
+        $listing = $this->db->query("SELECT * FROM listings WHERE id = :id", $queryParams)->fetch();
+
+        if (empty($listing)) {
+            ErrorController::notFound();
+            return;
+        }
+
+        $this->db->query("DELETE FROM listings WHERE id = :id", $params);
+
+        redirect('/listings');
+    }
 }
