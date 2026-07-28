@@ -94,3 +94,8 @@ function formatSalary($salary) {
 function sanitize(string $dirty) : string {
     return filter_var(trim($dirty), FILTER_SANITIZE_SPECIAL_CHARS);
 }
+
+function redirect(string $url) : void {
+    header("Location: {$url}");
+    exit;
+}
