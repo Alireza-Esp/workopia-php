@@ -20,5 +20,48 @@ class UserController {
     public function create(): void {
         loadView('users/create');
     }
+
+    public function store(): void {
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $city = $_POST['city'];
+        $state = $_POST['state'];
+        $password = $_POST['password'];
+        $passwordConfirmation = $_POST['password_confirmation'];
+
+        $errors = [];
+
+        if (!Validation::email($email)) {
+            $errors['email'] = "Please enter a valid email address";
+        }
+        if (!Validation::string($name, 2, 50)) {
+            $errors['name'] = "Name should be between 2 and 50 characters";
+        }
+        if (!Validation::string($password, 6, 50)) {
+            $errors['password'] = "Password should be greater than 6 characters";
+        }
+        if (!Validation::match($password, $passwordConfirmation)) {
+            $errors['password_confirmation'] = "Passwords should be equal";
+        }
+
+        if (!empty($errors)) {
+            loadView(
+                'users/create',
+                [
+                    'errors' => $errors,
+                    'user' => [
+                        'name' => $name,
+                        'email' => $email,
+                        'city' => $city,
+                        'state' => $state,
+                    ]
+                ]
+            );
+            exit;
+        } else {
+            inspectAndDie('success');
+        }
+    }
+    
 }
 
