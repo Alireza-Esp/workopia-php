@@ -5,7 +5,7 @@ namespace Framework;
 use PDO;
 
 class Database{
-    protected $conn;
+    public $conn;
 
     public function __construct(array $config) {
         $dsn = "mysql:host={$config['host']};port={$config['port']};dbname={$config['dbname']}";
