@@ -12,9 +12,9 @@ class Authorize {
 
     public static function handle($role): void {
         if ($role === "guest" && static::isAuthenticated()) {
-            return redirect('/');
+            redirect('/');
         } elseif ($role === "auth" && !static::isAuthenticated()) {
-            return redirect('/auth/login');
+            redirect('/auth/login');
         }
     }
 }
