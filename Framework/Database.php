@@ -46,6 +46,4 @@ class Database{
             throw new Exception("Query failed to execute: {$e->getMessage()}");
         }
     }
-
-    
 }
