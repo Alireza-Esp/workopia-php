@@ -77,14 +77,6 @@ class Router {
     }
 
     /**
-     * Renders error view with code
-     *
-     * @param int $httpCode code
-     *
-     * @return void
-     */
-
-    /**
      * Method route
      *
      * @param string $uri uri
@@ -99,7 +91,6 @@ class Router {
         }
 
         $uriSegments = explode('/', trim($uri, '/'));
-
 
         foreach ($this->routes as $route) {
             if ($route['method'] !== $requestMethod) {
