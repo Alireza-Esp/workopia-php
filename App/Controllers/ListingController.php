@@ -143,6 +143,11 @@ class ListingController {
 
         $listing = $this->db->query("SELECT * FROM listings WHERE id = :id", $queryParams)->fetch();
 
+        if (!Authorization::isOwner($listing->user_id)) {
+            Session::setFlashMessage("error_message", "You are not authorized to delete this listing");
+            redirect('/listings/' . $id);
+        }
+
         if (!$listing) {
             ErrorController::notFound();
         }
@@ -163,6 +168,11 @@ class ListingController {
         ];
 
         $listing = $this->db->query("SELECT * FROM listings WHERE id = :id", $queryParams)->fetch();
+
+        if (!Authorization::isOwner($listing->user_id)) {
+            Session::setFlashMessage("error_message", "You are not authorized to delete this listing");
+            redirect('/listings/' . $id);
+        }
 
         if (!$listing) {
             ErrorController::notFound();
