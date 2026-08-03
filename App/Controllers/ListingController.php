@@ -242,6 +242,13 @@ class ListingController {
 
         $listings = $this->db->query($query, $queryParams)->fetchAll();
 
-        inspectAndDie($listings);
+        loadView(
+            'listings/index',
+            [
+                'listings' => $listings,
+                'keywords' => $keywords,
+                'location' => $location,
+            ]
+        );
     }
 }
